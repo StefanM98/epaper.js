@@ -51,6 +51,7 @@ class Page {
 async function getPage(screen) {
     const browser = await puppeteer.launch({
         executablePath: 'chromium-browser',
+        ignoreDefaultArgs: ['--enable-automation'],
         args: [
             '--disable-web-security', 
             '--disable-features=IsolateOrigins', 
