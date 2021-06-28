@@ -51,6 +51,11 @@ class Page {
 async function getPage(screen) {
     const browser = await puppeteer.launch({
         executablePath: 'chromium-browser',
+        args: [
+            '--disable-web-security', 
+            '--disable-features=IsolateOrigins', 
+            ' --disable-site-isolation-trials'
+        ]
     });
     const browserPage = await browser.newPage();
     await browserPage.setViewport({
