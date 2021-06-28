@@ -54,14 +54,28 @@ async function getPage(screen) {
         args: [
             '--disable-web-security', 
             '--disable-features=IsolateOrigins', 
-            ' --disable-site-isolation-trials'
+            ' --disable-site-isolation-trials',
+            '--no-sandbox'
         ]
     });
     const browserPage = await browser.newPage();
+
+    // Pass the User-Agent Test.
+    const userAgent = 'Mozilla/5.0 (X11; Linux x86_64)' +
+    'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.39 Safari/537.36';
+    await page.setUserAgent(userAgent);
+
     await browserPage.setViewport({
         width: screen.width,
         height: screen.height,
         deviceScaleFactor: 1,
+    });
+    
+    // Pass the Webdriver Test.
+    await page.evaluateOnNewDocument(() => {
+        Object.defineProperty(navigator, 'webdriver', {
+        get: () => false,
+        });
     });
     return new Page(browserPage, screen);
 }
