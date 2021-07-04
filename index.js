@@ -22,14 +22,16 @@ const defaultRenderCallback = (page, ws) => {
 };
 
 function setupKeyInput(driver) {
-    readline.emitKeypressEvents(process.stdin);
-    process.stdin.setRawMode(true);
-    process.stdin.addListener('keypress', (key, data) => {
-        if (data.ctrl && data.name === 'c') {
-            driver.sleep();
-            process.exit();
-        }
-    });
+    if (process.stdin.isTTY) {
+        readline.emitKeypressEvents(process.stdin);
+        process.stdin.setRawMode(true);
+        process.stdin.addListener('keypress', (key, data) => {
+            if (data.ctrl && data.name === 'c') {
+                driver.sleep();
+                process.exit();
+            }
+        });
+    }
 }
 
 function init(
